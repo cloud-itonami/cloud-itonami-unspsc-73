@@ -1,0 +1,10 @@
+{:itonami.blueprint/id "cloud-itonami-unspsc-73"
+ :itonami.blueprint/name "Independent Industrial Cleaning & Certification Robotics"
+ :itonami.blueprint/unspsc-segment "73"
+ :itonami.blueprint/domain :industrial-services/cleaning-certification
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:worker-safety :contamination-prevention :local-jobs]
+ :itonami.blueprint/governor :industrial-cleaning-governor
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/required-technologies [:robotics :telemetry :optimization :bpmn :audit-ledger]
+ :itonami.blueprint/status :public-oss}
