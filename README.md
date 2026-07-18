@@ -10,6 +10,18 @@ a governor-gated actor, so an independent contractor keeps auditable
 cleaning and certification records instead of renting a closed
 facility-services SaaS.
 
+**Status: design blueprint, no code implemented yet.** This repository
+has zero files under `src/` and no `test/` directory — the Cleaning
+Advisor and Industrial Cleaning Governor described below do not exist
+in code. It is not (yet) a governed Advisor⊣Governor actuation actor;
+the Core Contract section specifies what that pipeline is intended to
+enforce once built, not current behavior. See
+[`cloud-itonami-isco-1324`](https://github.com/cloud-itonami/cloud-itonami-isco-1324)
+for this fleet's minimal implemented reference (`actor`/`advisor`/
+`governor`/`store`), and the `cloud-itonami-assoc-*` /
+`cloud-itonami-municipality-*` / `cloud-itonami-lei-*` repos for this
+fleet's honest not-an-actuation-actor disclaimer pattern.
+
 ## Robotics premise
 
 All cloud-itonami verticals are designed on the premise that a **robot
@@ -21,7 +33,7 @@ Governor** that gates it. The governor never dispatches hardware itself;
 `:high`/`:safety-critical` actions (confined-space entry, hazardous
 chemical residue) require human sign-off.
 
-## Core Contract
+## Core Contract (design intent — not yet implemented)
 
 ```text
 equipment/site cleaning request + prior certification history
@@ -33,9 +45,12 @@ Cleaning Advisor -> Industrial Cleaning Governor -> certify, or human sign-off
 robot cleaning actions (gated) + certification record + audit ledger
 ```
 
-No automated scan can certify equipment the governor would refuse,
-suppress a certification record, or downgrade a contamination finding
-without governor approval and audit evidence.
+**No code exists yet in this repo** — no `src/`, no `test/`, only this
+design document plus `blueprint.edn` and `docs/`. Once built, no
+automated scan will be able to certify equipment the governor would
+refuse, suppress a certification record, or downgrade a contamination
+finding without governor approval and audit evidence — but none of
+that is enforced today.
 
 ## Capability layer
 
