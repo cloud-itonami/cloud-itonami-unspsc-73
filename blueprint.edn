@@ -7,4 +7,32 @@
  :itonami.blueprint/governor :industrial-cleaning-governor
  :itonami.blueprint/robotics true
  :itonami.blueprint/required-technologies [:robotics :telemetry :optimization :bpmn :audit-ledger]
- :itonami.blueprint/status :public-oss}
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/maturity :implemented
+ :itonami.blueprint/implemented-slice
+ "CleaningAdvisor ⊣ Industrial Cleaning Governor, langgraph-clj
+ StateGraph, append-only audit ledger. A cleaning-and-certification
+ BACK-OFFICE COORDINATION actor for an independent industrial
+ equipment-cleaning contractor -- not direct wash/spray/dispense-
+ equipment control authority and not a real certification-signing
+ authority. Four ops (`:log-cleaning-completion` /
+ `:certification-scan` / `:flag-safety-concern` /
+ `:schedule-recleaning`), all `:effect :propose` only. Thirteen
+ concrete governor checks: propose-only effect, closed op allowlist,
+ closed proposal-effect allowlist (no direct cleaning-equipment
+ control), permanent equipment-actuate block, permanent
+ certification-authority side-channel block (this actor never
+ self-issues a real, signed cleaning-certification mark outside the
+ gated certification-scan path), independent equipment
+ verification/registration before any certification scan or re-clean
+ schedule, independent recompute of the certify/fail verdict from the
+ raw residue-ppm sensor reading against the equipment's own registered
+ threshold (never trusting a proposal's own self-reported decision),
+ residue-reading plausibility validation, independent on-file-failed-
+ certification gate before any re-clean may be scheduled (or billed),
+ double-schedule guard, and cleaning-job-duration plausibility
+ validation. Safety-concern flagging (confined-space entry --
+ OSHA 29 CFR 1910.146; hazardous chemical residue -- OSHA 29 CFR
+ 1910.1200) ALWAYS escalates to a human contractor-operator;
+ `:log-cleaning-completion` is the only op eligible to auto-commit,
+ and only at phase 3 when governor-clean."}
