@@ -1,0 +1,43 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README "Robotics premise": a cleaning/inspection robot performs
+;; equipment/surface cleaning and a post-clean residue scan for an
+;; industrial cleaning and certification contractor; confined-space entry
+;; is always human-signed-off. Its physical work: draining a process vessel
+;; before it is cleaned, pushing rinse water through the hose to its
+;; cleaning head, and waiting for a steam-cleaned vessel wall to cool before
+;; anyone (or the scan) goes in.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-unspsc-73"
+ :cases
+ [{:id :vessel-drain-before-clean
+   :kind :tank-drain
+   :procedure "process vessel (3 m2 floor, 2.5 m liquid) drains by gravity through its bottom valve down to a 5 cm heel before cleaning"
+   :params {:tank-area-m2 3.0 :h0-m 2.5 :h-target-m 0.05 :cd 0.62 :dt-s 0.5 :max-time-s 86400.0}
+   :sweep {:param :orifice-area-m2 :values [4.9e-4 1.13e-3 1.96e-3 3.14e-3 5.03e-3]}
+   :quantity :time-to-target-s
+   :limit {:max 1800.0 :basis "estimate: the drain step of a cleaning job should take no more than 30 minutes of the shift"}
+   :boundary {:lo 2.0e-4 :hi 1.0e-2}}
+  {:id :rinse-hose-to-head
+   :kind :pipe-flow
+   :procedure "rinse water is pushed 40 m through a 19 mm hose, 8 m up to the cleaning head on the vessel top"
+   :params {:diameter-m 0.019 :length-m 40.0 :roughness-m 1.5e-6 :density-kg-m3 998.0
+            :viscosity-pa-s 1.0e-3 :pump-efficiency 0.6 :elevation-m 8.0}
+   :sweep {:param :q-m3s :values [3.0e-4 7.5e-4 1.25e-3 2.0e-3 2.5e-3]}
+   :quantity :pressure-drop-pa
+   :limit {:max 1.0e6 :basis "estimate: 10 bar outlet rating of a skid-mounted rinse pump"}
+   :boundary {:lo 1.0e-4 :hi 3.0e-3}}
+  {:id :steamed-wall-cooldown
+   :kind :thermal
+   :procedure "10 mm stainless vessel wall at 120 C after steam cleaning cools to the ventilated air inside; the jacket side is insulated; judged until it falls to 45 C"
+   :params {:thickness-m 0.010 :conductivity-w-mk 16.0 :density-kg-m3 8000.0 :specific-heat-j-kgk 500.0
+            :t0-c 120.0 :t-hot-c 25.0 :h-back-w-m2k 0.0 :t-back-ambient-c 25.0
+            :threshold-c 45.0 :threshold-direction :falling :duration-s 14400.0 :nodes 5}
+   :sweep {:param :h-front-w-m2k :values [5.0 10.0 15.0 25.0 40.0]}
+   :quantity :time-to-threshold-s
+   :limit {:max 3600.0 :basis "estimate: a vessel should be cool enough to touch within an hour of the steam step so entry and the post-clean scan fit the job"}
+   :boundary {:lo 2.0 :hi 100.0}}]}
