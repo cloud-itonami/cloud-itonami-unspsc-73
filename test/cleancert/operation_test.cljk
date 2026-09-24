@@ -5,7 +5,7 @@
   `cleancert.governor-contract-test` (full graph) and
   `cleancert.governor-test` (direct unit); the Store contract in
   `cleancert.store-contract-test`."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [langgraph.graph :as g]
             [cleancert.operation :as op]
             [cleancert.store :as store]))

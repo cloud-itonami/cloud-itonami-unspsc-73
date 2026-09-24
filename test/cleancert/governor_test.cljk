@@ -8,7 +8,7 @@
   path -- exercised here directly, the same discipline
   `cleancert.governor-contract-test` applies at the full-graph level for
   every other rule."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [cleancert.store :as store]
             [cleancert.governor :as governor]))
 

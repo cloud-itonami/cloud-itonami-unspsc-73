@@ -1,7 +1,7 @@
 (ns cleancert.store-contract-test
   "The Store contract as executable tests. Single MemStore backend --
   see `cleancert.store` ns docstring."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [cleancert.store :as store]))
 
 (defn- seeded [] (-> (store/mem-store) (store/sample-data!)))
